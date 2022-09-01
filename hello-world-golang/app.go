@@ -6,15 +6,20 @@ import (
 	"net/http"
 )
 
-const PORT = process.env.PORT || 3002;
-
 var scores = make(map[string]int)
 
 func main() {
+
+	port := os.Getenv("PORT")
+
+    if port == "" {
+        port := 3002
+    }
+
 	http.HandleFunc("/hello", HelloServer)
 	http.HandleFunc("/inc-score", IncrementCounter)
 	http.HandleFunc("/get-scores", GetScores)
-	http.ListenAndServe(":" + PORT, nil)
+	http.ListenAndServe(":" + port, nil)
 }
 
 func HelloServer(w http.ResponseWriter, r *http.Request) {

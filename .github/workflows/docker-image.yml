@@ -155,6 +155,7 @@ jobs:
     runs-on: ubuntu-20.04
     needs: 
       - build-docker-golang
+      - deploy-heroku-node
     steps:
       - uses: actions/checkout@v3
       - uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
