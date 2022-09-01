@@ -2,8 +2,8 @@ name: Docker Image CI
 
 env:
   REGISTRY: danielhbarbieri
-  IMAGE_NAME_NODE: helloNode
-  IMAGE_NAME_GOLANG: helloGolang
+  IMAGE_NAME_NODE: hellonode
+  IMAGE_NAME_GOLANG: hellogolang
 
 on:
   push:
