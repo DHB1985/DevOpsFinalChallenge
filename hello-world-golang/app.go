@@ -6,6 +6,8 @@ import (
 	"net/http"
 )
 
+const PORT = process.env.PORT || 3002;
+
 var scores = make(map[string]int)
 
 func main() {
