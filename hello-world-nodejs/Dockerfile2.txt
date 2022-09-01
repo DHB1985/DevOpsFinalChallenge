@@ -1,0 +1,29 @@
+#Se inicializa el contenedor con la imagen de Ubuntu 18.04
+FROM ubuntu:18.04
+
+#Inatalación de nodejs 16 en el contenedor de Ubuntu
+RUN apt update
+RUN apt upgrade -y
+RUN apt install -y curl
+RUN curl -s https://deb.nodesource.com/setup_14.x | bash
+RUN apt install nodejs -y
+
+#Se declara el directorio de trabajo
+WORKDIR /app 
+
+#Se copian los archivos .json
+COPY package*.json ./
+
+#Se instalan las dependencias
+RUN npm install
+
+#Se copian los archivos
+COPY ./server .
+COPY tsconfig.json .
+
+
+#Se expone el puerto 8888
+EXPOSE 8888
+
+#Se levanta el proyecto de node
+CMD ["npm","run", "start"]
