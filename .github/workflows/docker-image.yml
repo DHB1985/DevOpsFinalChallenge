@@ -150,3 +150,18 @@ jobs:
           healthcheck: "https://${{env.HEROKU_NAME_NODE}}.herokuapp.com/hello"
           appdir: "./hello-world-nodejs"
           usedocker: true
+
+  deploy-heroku-golang:
+    runs-on: ubuntu-20.04
+    needs: 
+      - build-docker-golang
+    steps:
+      - uses: actions/checkout@v3
+      - uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: ${{env.HEROKU_NAME_GOLANG}} #Must be unique in Heroku
+          heroku_email: "danielbarbieri@gmail.com"
+          healthcheck: "https://${{env.HEROKU_NAME_GOLANG}}.herokuapp.com/hello"
+          appdir: "./hello-world-nodejs"
+          usedocker: true
