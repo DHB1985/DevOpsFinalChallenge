@@ -57,7 +57,7 @@ jobs:
         with:
           context: ./hello-world-golang
           push: true
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_NODE }}:latest
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_GOLANG }}:latest
 
   # build-dockerCompose:
   #   runs-on: ubuntu-20.04
