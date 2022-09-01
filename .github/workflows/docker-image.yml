@@ -29,8 +29,8 @@ jobs:
 
   build-docker-node:
     runs-on: ubuntu-20.04
-    needs:
-      - init
+    # needs:
+    #   - init
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -52,9 +52,9 @@ jobs:
 
   build-docker-golang:
     runs-on: ubuntu-20.04
-    needs:
-      # - build-docker-node
-      - init
+    # needs:
+      # # - build-docker-node
+      # - init
     steps:
       - name: Checkout
         uses: actions/checkout@v3
