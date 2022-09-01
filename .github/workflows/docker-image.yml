@@ -13,10 +13,24 @@ on:
 
 jobs:
 
+  init:
+    runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        node-version: [14.x]
+    steps:
+    - uses: actions/checkout@v3
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - run: npm install
+
   build-docker-node:
     runs-on: ubuntu-20.04
-    # needs:
-    #   - init
+    needs:
+      - init
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -39,7 +53,8 @@ jobs:
   build-docker-golang:
     runs-on: ubuntu-20.04
     needs:
-      - build-docker-node
+      # - build-docker-node
+      - init
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -118,14 +133,11 @@ jobs:
     # # - run: npm install
 
     # strategy:
-
-
   
-  deploy-heroku:
+  deploy-heroku-node:
     runs-on: ubuntu-20.04
     needs: 
       - build-docker-node
-      - build-docker-golang
     steps:
       - uses: actions/checkout@v3
       - uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
@@ -133,4 +145,5 @@ jobs:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "devopsfinalchallenge" #Must be unique in Heroku
           heroku_email: "danielbarbieri@gmail.com"
+          appdir: "./hello-world-nodejs"
           usedocker: true
