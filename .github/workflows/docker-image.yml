@@ -10,8 +10,8 @@ env:
 on:
   push:
     branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+  # pull_request:
+  #   branches: [ "main" ]
 
 jobs:
 
@@ -87,7 +87,7 @@ jobs:
   #         heroku_api_key: ${{secrets.HEROKU_API_KEY}}
   #         heroku_app_name: ${{env.HEROKU_NAME_NODE}} #Must be unique in Heroku
   #         heroku_email: "danielbarbieri@gmail.com"
-  #         healthcheck: "https://${{env.HEROKU_NAME_NODE}}.herokuapp.com/hello"
+  #         healthcheck: "https://${{env.HEROKU_NAME_NODE}}.herokuapp.com"
   #         appdir: "./hello-world-nodejs"
   #         usedocker: true
 
@@ -103,6 +103,6 @@ jobs:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: ${{env.HEROKU_NAME_GOLANG}} #Must be unique in Heroku
           heroku_email: "danielbarbieri@gmail.com"
-          healthcheck: "https://${{env.HEROKU_NAME_GOLANG}}.herokuapp.com/hello"
+          healthcheck: "https://${{env.HEROKU_NAME_GOLANG}}.herokuapp.com"
           appdir: "./hello-world-golang"
           usedocker: true
