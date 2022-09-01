@@ -1,15 +1,11 @@
-#Se cambia la imagen del contenedor para que sea más liviana.
-FROM node:14-alpine 
+FROM golang:1.18
 
-WORKDIR /app 
+WORKDIR /usr/src/app
 
-COPY package*.json ./ 
+# pre-copy/cache go.mod for pre-downloading dependencies and only redownloading them in subsequent builds if they change
 
-RUN npm install 
+COPY . .
 
-COPY . . 
+EXPOSE 3002
 
-#Se expone el puerto 3000 para poder utilizarlo cuando se levanta el contenedor.
-EXPOSE 3000
-
-CMD ["npm", "run", "start"]
+CMD ["go", "run", "app.go"]
