@@ -163,5 +163,5 @@ jobs:
           heroku_app_name: ${{env.HEROKU_NAME_GOLANG}} #Must be unique in Heroku
           heroku_email: "danielbarbieri@gmail.com"
           healthcheck: "https://${{env.HEROKU_NAME_GOLANG}}.herokuapp.com/hello"
-          appdir: "./hello-world-nodejs"
+          appdir: "./hello-world-golang"
           usedocker: true
