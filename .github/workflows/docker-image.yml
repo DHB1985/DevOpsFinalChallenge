@@ -10,7 +10,7 @@ jobs:
 
   init:
 
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
 
     strategy:
       matrix:
@@ -28,15 +28,20 @@ jobs:
     # strategy:
 
   build-dockerCompose:
-    # need checkout before using compose-action
-    - uses: actions/checkout@v3
-    - uses: isbang/compose-action@v1.2.0
-      with:
-        compose-file: "./deploy/docker-compose.yml"
-        services: |
-          hello-node
-          hello-golang
-          hello-nginx
+    runs-on: ubuntu-20.04
+    needs:
+      - init
+    steps:
+      - name: Checkout
+      - uses: actions/checkout@v3
+      - name: Set up DockerCompose
+      - uses: isbang/compose-action@v1.2.0
+        with:
+          compose-file: "./deploy/docker-compose.yml"
+          services: |
+            hello-node
+            hello-golang
+            hello-nginx
   
   deploy-heroku:
     runs-on: ubuntu-20.04
