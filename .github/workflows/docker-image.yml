@@ -8,17 +8,31 @@ on:
 
 jobs:
 
-  build:
+  init:
 
     runs-on: ubuntu-latest
 
-    steps:
+    # strategy:
+
+    build-dockerCompose:
       # need checkout before using compose-action
       - uses: actions/checkout@v3
       - uses: isbang/compose-action@v1.2.0
         with:
-          compose-file: "./docker/docker-compose.yml"
-          down-flags: "--volumes"
+          compose-file: "./deploy/docker-compose.yml"
           services: |
-            helloworld2
-            helloworld3
+            hello-node
+            hello-golang
+            hello-nginx
+    
+    deploy-heroku:
+      runs-on: ubuntu-20.04
+      needs: build-dockerCompose
+      steps:
+        - uses: actions/checkout@v3
+        - uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
+          with:
+            heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+            heroku_app_name: "devopsfinalchallenge" #Must be unique in Heroku
+            heroku_email: "danielbarbieri@gmail.com"
+            usedocker: true
