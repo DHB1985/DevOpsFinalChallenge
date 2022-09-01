@@ -1,0 +1,24 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      # need checkout before using compose-action
+      - uses: actions/checkout@v3
+      - uses: isbang/compose-action@v1.2.0
+        with:
+          compose-file: "./docker/docker-compose.yml"
+          down-flags: "--volumes"
+          services: |
+            helloworld2
+            helloworld3
