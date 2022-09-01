@@ -11,26 +11,6 @@ jobs:
   init:
 
     runs-on: ubuntu-20.04
-
-    strategy:
-      matrix:
-        node-version: [14.x]
-
-    steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: npm install
-
-    # strategy:
-
-  build-dockerCompose:
-    runs-on: ubuntu-20.04
-    needs:
-      - init
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -42,10 +22,42 @@ jobs:
             hello-node
             hello-golang
             hello-nginx
+
+    # strategy:
+    #   matrix:
+    #     node-version: [14.x]
+
+    # # steps:
+    # # - uses: actions/checkout@v3
+    # # - name: Use Node.js ${{ matrix.node-version }}
+    # #   uses: actions/setup-node@v3
+    # #   with:
+    # #     node-version: ${{ matrix.node-version }}
+    # #     cache: 'npm'
+    # # - run: npm install
+
+    # strategy:
+
+  # build-dockerCompose:
+  #   runs-on: ubuntu-20.04
+  #   needs:
+  #     - init
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v3
+  #     - name: Set up DockerCompose
+  #       uses: isbang/compose-action@v1.2.0
+  #       with:
+  #         compose-file: "./deploy/docker-compose.yml"
+  #         services: |
+  #           hello-node
+  #           hello-golang
+  #           hello-nginx
   
   deploy-heroku:
     runs-on: ubuntu-20.04
-    needs: build-dockerCompose
+    # needs: build-dockerCompose
+    needs: init
     steps:
       - uses: actions/checkout@v3
       - uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
