@@ -69,7 +69,7 @@ jobs:
 
   build-docker-golang:
     runs-on: ubuntu-20.04
-    # needs:
+    needs:
       # # - build-docker-node
       # - init
       - deploy-heroku-node
