@@ -67,43 +67,43 @@ jobs:
           appdir: "./hello-world-nodejs"
           usedocker: true
 
-  # build-docker-golang:
-  #   runs-on: ubuntu-20.04
-  #   needs:
-  #     # # - build-docker-node
-  #     # - init
-  #     - deploy-heroku-node
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v3
-  #     - name: Set up QEMU
-  #       uses: docker/setup-qemu-action@v2
-  #     - name: Set up Docker Buildx
-  #       uses: docker/setup-buildx-action@v2
-  #     - name: Login to DockerHub
-  #       uses: docker/login-action@v2
-  #       with:
-  #         username: ${{ secrets.DOCKER_USERNAME }}
-  #         password: ${{ secrets.DOCKER_PASSWORD }}
-  #     - name: Build and push
-  #       uses: docker/build-push-action@v3
-  #       with:
-  #         context: ./hello-world-golang
-  #         push: true
-  #         tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_GOLANG }}:latest
+  build-docker-golang:
+    runs-on: ubuntu-20.04
+    needs:
+      # # - build-docker-node
+      # - init
+      - deploy-heroku-node
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Build and push
+        uses: docker/build-push-action@v3
+        with:
+          context: ./hello-world-golang
+          push: true
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_GOLANG }}:latest
 
-  # deploy-heroku-golang:
-  #   runs-on: ubuntu-20.04
-  #   needs: 
-  #     - build-docker-golang
-  #     # - deploy-heroku-node
-  #   steps:
-  #     - uses: actions/checkout@v3
-  #     - uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
-  #       with:
-  #         heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-  #         heroku_app_name: ${{env.HEROKU_NAME_GOLANG}} #Must be unique in Heroku
-  #         heroku_email: "danielbarbieri@gmail.com"
-  #         healthcheck: "https://${{env.HEROKU_NAME_GOLANG}}.herokuapp.com"
-  #         appdir: "./hello-world-golang"
-  #         usedocker: true
+  deploy-heroku-golang:
+    runs-on: ubuntu-20.04
+    needs: 
+      - build-docker-golang
+      # - deploy-heroku-node
+    steps:
+      - uses: actions/checkout@v3
+      - uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: ${{env.HEROKU_NAME_GOLANG}} #Must be unique in Heroku
+          heroku_email: "danielbarbieri@gmail.com"
+          healthcheck: "https://${{env.HEROKU_NAME_GOLANG}}.herokuapp.com/hello"
+          appdir: "./hello-world-golang"
+          usedocker: true
