@@ -5,8 +5,8 @@ env:
   IMAGE_NAME_NODE: hellonode
   HEROKU_NAME_NODE: devopsfinalchallengenode
   IMAGE_NAME_GOLANG: hellogolang
-  HEROKU_NAME_GOLANG: devopsfinalchallengegolang
-
+  HEROKU_NAME_GOLANG: backgodev1
+  
 on:
   push:
     branches: [ "main" ]

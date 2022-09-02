@@ -4,33 +4,28 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"strconv"
-	//"flag"
 	"os"
 )
-var port = os.Getenv("PORT")
+
 var scores = make(map[string]int)
-// var port = ":"+strconv.Itoa(3002)
+
 func main() {
 
-	
-	// //port := 3002
+	port := os.Getenv("PORT")
+
     if port == "" {
-        port = ":"+strconv.Itoa(3002)
+        port = "3002"
     }
 
 	http.HandleFunc("/hello", HelloServer)
 	http.HandleFunc("/inc-score", IncrementCounter)
 	http.HandleFunc("/get-scores", GetScores)
-	http.ListenAndServe(port, nil)
+	http.ListenAndServe(":"+port, nil)
 
 }
 
 func HelloServer(w http.ResponseWriter, r *http.Request) {
-	//var port1 = port + "hola"
 	fmt.Fprintf(w, "Hello, %s!", r.URL.Path[1:])
-	//fmt.Fprintf(w, "Hello, %s!", port1)
-
 }
 
 // IncrementCounter increments some "score" for a user
