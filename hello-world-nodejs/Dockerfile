@@ -7,7 +7,7 @@ COPY package*.json ./
 
 RUN npm install 
 
-COPY . . 
+COPY ./server ./server 
 
 #Se expone el puerto 3000 para poder utilizarlo cuando se levanta el contenedor.
 EXPOSE 3000
