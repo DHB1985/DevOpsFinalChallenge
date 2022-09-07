@@ -1,5 +1,7 @@
 #!/bin/sh
 
+git pull origin main
+
 cd deploy
 
 docker stop helloNode helloGolang helloNginx 
