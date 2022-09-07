@@ -21,7 +21,6 @@ func main() {
 	http.HandleFunc("/inc-score", IncrementCounter)
 	http.HandleFunc("/get-scores", GetScores)
 	http.ListenAndServe(":"+port, nil)
-
 }
 
 func HelloServer(w http.ResponseWriter, r *http.Request) {

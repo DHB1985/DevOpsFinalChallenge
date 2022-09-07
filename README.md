@@ -32,7 +32,7 @@ Los cambios que se realizaron son los siguientes
 
 El archivo Dockerfile quedó de la siguiente manera.
 
-```bash
+```dockerfile
 FROM node:14-alpine 
 WORKDIR /app 
 
@@ -52,7 +52,7 @@ En la misma se eliminó el segundo argumento `"127.0.0.1"` ya que la misma gener
 
 Con estos cambios el archivo server.ts quedó de la siguiente manera.
 
-```bash
+```javascript
 import express from "express";
 
 const PORT = process.env.PORT || 3000;
@@ -78,7 +78,7 @@ Al cambiar la versión de la imagen de node, disminuyó el tamaño.
 
 El archivo Dockerfile estaba vacío. El mismo se programó y quedó de la sigueinte manera
 
-```bash
+```dockerfile
 FROM golang:1.18
 
 WORKDIR /usr/src/app
@@ -95,14 +95,16 @@ Luego se realizó una prueba para correr un contenedor con la imagen generada po
 ![SingleList](./assets/hello-world-golang/001Images.png)
 ![SingleList](./assets/hello-world-golang/002CreacionImagen-CreacionContenedor.png)
 ![SingleList](./assets/hello-world-golang/003Navegador1.png)
+
 ![SingleList](./assets/hello-world-golang/004Navegador2.png)
+
 ![SingleList](./assets/hello-world-golang/005Navegador3.png)
 
 ## Archivo app.go.
 
 En este archivo se cambiaron algunas líneas para poder desplegarlo en Heroku.
 
-```bash
+```golang
 package main
 
 import (
@@ -158,3 +160,120 @@ func GetScores(w http.ResponseWriter, r *http.Request) {
 ### Conclusión.
 
 Con los cambios realizados en la app y como se programó el Dockerfile, tanto en local como en Heroku, quedó corriendo y funcionando.
+
+## Cambios y correcciones hello-world-nginx.
+
+### Archivo Dockerfile.
+
+En el archivo Dockerfile faltaba exponer el puerto para poder comunicarse con el contenedor cuando la misma se levante.
+
+```dockerfile
+FROM nginx:alpine
+
+RUN apk add --no-cache jq curl
+
+COPY docker-deps/default.conf /etc/nginx/conf.d/default.conf
+
+EXPOSE 18181
+```
+
+## Archivo default.conf.
+
+Se modificó para que tome las distintas direcciones tanto del node como del golang.
+
+```nginx
+upstream nodejs {
+    server helloNode:3000;
+}
+
+upstream golang {
+    server helloGolang:3002;
+}
+
+server {
+    listen 18181;
+
+    location = /health {
+        access_log off;
+        log_not_found off;
+        return 200 'healthy';
+    }
+
+    location = /nodejs/hello {
+        proxy_pass http://nodejs/hello;
+    }
+
+    location = /golang/hello {
+        proxy_pass http://golang/hello;
+    }
+
+    location = /golang/get-scores {
+        proxy_pass http://golang/get-scores;
+    }
+
+    location = /golang/inc-score {
+        proxy_pass http://golang/inc-score?name=daniel;
+    }
+}
+```
+
+Un vez terminadod e configurar la imagen para levantar el contenedor nginx, se pasó a probar los distintos endpoints con curl.
+
+![SingleList](./assets/hello-world-nginx/001.png)
+![SingleList](./assets/hello-world-nginx/002.png)
+
+## Creación archivo docker-compose.yml.
+
+### Archivo docker-compose.yml.
+```yaml
+version: '3'
+
+services:
+
+  #hello-world-nodejs
+  hello-node:
+    build: ../hello-world-nodejs
+    container_name: helloNode
+    networks:
+      - app-net
+    volumes:
+      - ../hello-world-nodejs/server:/app/server
+
+  #hello-world-golang
+  hello-golang:
+    build: ../hello-world-golang
+    volumes:
+      - ../hello-world-golang:/docker-entrypoint-initdb.d
+    container_name: helloGolang
+    networks:
+      - app-net
+
+  #hello-world-nginx
+  hello-nginx:
+    build: ../hello-world-nginx
+    container_name: helloNginx
+    networks:
+      - app-net
+    ports:
+      - "80:18181"
+    depends_on:
+      - hello-node
+      - hello-golang
+
+networks:
+  app-net:
+    driver: bridge
+```
+
+## Diseño CICD.
+
+Se diseño con Github actions para subir los contenedores a DockerHub las aplicaciones de node y golang.
+Aparte también se desplegaron estas dos aplicaciones en Heroku cuando se realiza un push o un pell request.
+
+El archivo se puede ver en [docker-images.yml](./github/workflows/docker-image.yml)
+
+## Implementación automática.
+
+Se programó un script para desplegar las aplicaciones localmente.
+
+El archivo se puede ver en [docker-images.yml](./github/workflows/docker-image.yml)
