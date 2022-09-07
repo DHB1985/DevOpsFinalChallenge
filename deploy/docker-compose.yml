@@ -8,8 +8,8 @@ services:
     container_name: helloNode
     networks:
       - app-net
-    volumes:
-      - ../hello-world-nodejs:/app
+    # volumes:
+    #   - ../hello-world-nodejs:/app
     # ports:
     #   - "3000:3000"
     # depends_on:
@@ -18,8 +18,8 @@ services:
   #hello-world-golang
   hello-golang:
     build: ../hello-world-golang
-    volumes:
-      - ../hello-world-golang:/docker-entrypoint-initdb.d
+    # volumes:
+    #   - ../hello-world-golang:/docker-entrypoint-initdb.d
     container_name: helloGolang
     networks:
       - app-net
