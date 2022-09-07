@@ -276,4 +276,4 @@ El archivo se puede ver en [docker-images.yml](./github/workflows/docker-image.y
 
 Se programó un script para desplegar las aplicaciones localmente.
 
-El archivo se puede ver en [docker-images.yml](./github/workflows/docker-image.yml)
+El archivo se puede ver en [inicio.sh](./inicio.sh)

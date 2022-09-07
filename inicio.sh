@@ -2,6 +2,13 @@
 
 git pull origin main
 
+cd hello-world-nodejs
+if ! [ -d node_modules ]
+then
+    npm install
+fi
+cd ..
+
 cd deploy
 
 docker stop helloNode helloGolang helloNginx 
